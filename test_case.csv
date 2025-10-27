@@ -1,0 +1,7 @@
+password,description,button_clickable
+abc123,short_length,False
+abcdefgh,no_numbers,False
+ABCDEFGH,no_lowercase,False
+abcd1234,no_uppercase,False
+
+
