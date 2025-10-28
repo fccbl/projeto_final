@@ -1,6 +1,7 @@
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import TimeoutException
 import logging
 import pyperclip
 import time
@@ -66,16 +67,20 @@ class LoginPage():
        3. Extrai o código (última palavra da mensagem).
        4. Converte para inteiro e retorna.
       """
-       self.wait.until(EC.visibility_of_element_located(self.codigo_email_message)).click()
-       message_element = self.wait.until(EC.visibility_of_element_located(self.code_message))
-       message_text = message_element.text
+       try: 
+           self.wait.until(EC.element_to_be_clickable(self.codigo_email_message)).click()
+           message_element = self.wait.until(EC.visibility_of_element_located(self.code_message))
+           message_text = message_element.text
        #converter string para inteiro
-       code_str = message_text.split()[-1]
-       code_int = int(code_str)
-       logging.info(f"Código de acesso capturado: {code_int}")
-       return code_int
-
-     
+           code_str = message_text.split()[-1]
+           code_int = int(code_str)
+           logging.info(f"Código de acesso capturado: {code_int}")
+           return code_int
+       except TimeoutException:
+         error_message = f"❌ Erro de Timeout: O elemento da mensagem do código ({self.code_message}) não carregou a tempo."
+         logging.error(error_message)
+         return None
+           
      def return_to_login_tab_after_code(self):
         """Volta para a aba principal da Americanas após capturar o código."""
         self.driver.switch_to.window(self.driver.window_handles[0])
@@ -84,11 +89,8 @@ class LoginPage():
      def codigo_input_field(self, code):
       """Preenche o campo de código de verificação com o código fornecido."""
       try:
-        # Espera o input estar presente no DOM
         campo_codigo = self.wait.until(EC.presence_of_element_located(self.codigo_input))
-        # Espera o input ficar visível
         self.wait.until(EC.visibility_of(campo_codigo))
-        # Preenche o código
         campo_codigo.send_keys(code)
         logging.info(f"Código {code} preenchido no campo de verificação")
       except Exception as e:
@@ -102,6 +104,7 @@ class LoginPage():
      
      def validate_homepage(self, expect_url):
       """Valida se a página atual é a homepage esperada."""
+      time.sleep(7)
       try:
         # Espera até que a URL mude em relação à anterior
         self.wait.until(EC.url_changes(expect_url))

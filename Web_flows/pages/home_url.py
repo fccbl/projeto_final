@@ -13,8 +13,16 @@ class HomePage:
         self.login_button = (By.CSS_SELECTOR, "a[href='/login']")
 
     def navigate(self, url):
-        """Abre a página inicial na URL fornecida."""
-        self.driver.get(url)
+        """Abre a página inicial na URL fornecida e limpa cookies"""
+        try:
+            self.driver.delete_all_cookies()
+            logging.info("Sessão anterior limpa — cookies removidos.")
+            
+            self.driver.get(url)
+            logging.info(f"Abrindo página inicial: {url}")
+        except Exception as e:
+            logging.error(f"Erro ao abrir a página inicial: {e}")
+            raise
     
     def close_popup(self):
         """Fecha o popup de anúncio se ele estiver visível."""

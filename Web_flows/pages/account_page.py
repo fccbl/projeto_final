@@ -20,6 +20,9 @@ class MyAccountPage():
         self.success_field = (By.XPATH, "//div[text()='Senha']/following-sibling::div[contains(@class,'maskedPassword_content')]")
         self.password = "Abcdef12"
         self.container = (By.CSS_SELECTOR,".vtex-my-authentication-1-x-box_content")
+        self.resend_code_button = (By.CSS_SELECTOR, "div.vtex-my-authentication-1-x-resendCodeButton_container button")
+        self.codigo_email_message = (By.CSS_SELECTOR, "span[data-qa='message-subject']")
+        self.code_message = (By.CSS_SELECTOR, "h1[data-qa='message-subject']")
 
     def account_button_click(self,email):
         """Clica no botão 'Minha Conta' e valida o e-mail exibido."""
@@ -45,11 +48,40 @@ class MyAccountPage():
      except Exception as e:
         logging.error(f"Erro ao acessar 'Definir senha': {e}")
         raise
+  
+    def send_new_code(self):
+        """
+        Clica em 'Reenviar código' e alterna para a aba do Temp-Mail
+        para capturar o novo código de acesso.
+        """
+        self.wait.until(EC.element_to_be_clickable(self.resend_code_button)).click()
+        logging.info("Botão 'Enviar novo código' clicado")
+        self.driver.switch_to.window(self.driver.window_handles[1])
+        logging.info("Voltando para a aba do Temp-Mail")
 
+    def get_new_code(self):
+        """
+         Atualiza a página do Temp-Mail, captura o novo código de acesso 
+        e retorna para a aba da Americanas.
+         """
+        time.sleep(5) 
+        self.driver.refresh()
+        logging.info("Página do Temp-Mail atualizada para buscar o novo e-mail.")
+        self.wait.until(EC.element_to_be_clickable(self.codigo_email_message)).click()
+        message_element = self.wait.until(EC.visibility_of_element_located(self.code_message))
+        message_text = message_element.text
+
+       #converter string para inteiro
+        new_code_str = message_text.split()[-1]
+        new_code_int = int(new_code_str)
+        logging.info(f"Código de acesso capturado: {new_code_int}")
+        self.driver.switch_to.window(self.driver.window_handles[0])
+        logging.info("Voltando para a aba da Americanas após pegar o código")
+        return new_code_int
         
     
     def enter_access_code(self,code):
-        """Insere o código de acesso recebido por e-mail no campo apropriado."""
+        """Insere o novo código de acesso recebido por e-mail no campo."""
         try:
           input_field = self.wait.until(EC.presence_of_element_located(self.input_code))
           input_field.send_keys(code)

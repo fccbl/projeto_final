@@ -30,7 +30,9 @@ def test_web_flow(driver, temp_mail_url, base_url_americanas):
     account_page = MyAccountPage(driver)
     account_page.account_button_click(email_temporario)
     account_page.go_to_set_password()
-    account_page.enter_access_code(code)
+    account_page.send_new_code()
+    new_code = account_page.get_new_code()
+    account_page.enter_access_code(new_code)
   # Cenário de teste
     test_post = load_csv_test_cases("test_case.csv")
     for case in test_post:
