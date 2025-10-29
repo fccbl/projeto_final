@@ -102,18 +102,15 @@ class LoginPage():
           self.wait.until(EC.element_to_be_clickable(self.confirm_button)).click()
           logging.info("Clique no botão Confirmar realizado")
      
-     def validate_homepage(self, expect_url):
+     def validate_homepage(self, expected_url):
       """Valida se a página atual é a homepage esperada."""
-      time.sleep(7)
       try:
-        # Espera até que a URL mude em relação à anterior
-        self.wait.until(EC.url_changes(expect_url))
-        current = self.driver.current_url
-        logging.info(f"URL alterada com sucesso: {current}")
+        # Espera até que a URL atual seja a esperada
+        self.wait.until(EC.url_contains(expected_url))
+        logging.info(f"URL alterada com sucesso: {self.driver.current_url}")
         return True
       except Exception as e:
-        current = self.driver.current_url
-        logging.error(f"A URL não mudou como esperado. Atual: {current}, anterior: {expect_url}. Erro: {e}")
+        logging.error(f"A URL não mudou como esperado. Atual: {self.driver.current_url}, esperada: {expected_url}. Erro: {e}")
         return False
 
      def validate_login(self, email):

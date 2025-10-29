@@ -5,7 +5,7 @@ from selenium import webdriver
 @pytest.fixture
 def driver():
     """
-    Cria uma instância do Chrome, maximiza a janela e fecha ao final do teste.
+    Cria uma instância do Chrome 
     """
     driver_instance = webdriver.Chrome()
     driver_instance.maximize_window()

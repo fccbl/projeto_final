@@ -3,6 +3,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import ElementClickInterceptedException
 import logging
 import time
 
@@ -32,22 +33,31 @@ class MyAccountPage():
         assert account_email == email
         logging.info("Email do usuário validado")
 
+
     def go_to_set_password(self):
-     """
-        Acessa a tela de 'Definir senha' clicando no link de autenticação.
-        Inclui scroll para garantir que o elemento esteja visível.
-        """
-     try:
+      """
+      Acessa a tela de 'Definir senha' clicando no link de autenticação.
+      Se a tela de gerenciamento de sessões aparecer, repete o clique no link.
+      """
+      try:
         link = self.wait.until(EC.element_to_be_clickable(self.link_authentication))
         self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", link)
         link.click()
         logging.info("Link 'Autenticação' clicado.")
 
-        self.wait.until(EC.element_to_be_clickable(self.set_password)).click()
-        logging.info("Botão 'Definir senha' clicado com sucesso.")
-     except Exception as e:
+        try:
+            self.wait.until(EC.element_to_be_clickable(self.set_password)).click()
+            logging.info("Botão 'Definir senha' clicado com sucesso.")
+        except ElementClickInterceptedException:
+            logging.warning("Tela de gerenciamento de sessões apareceu, repetindo clique no link...")
+            link = self.wait.until(EC.element_to_be_clickable(self.link_authentication))
+            link.click()
+            self.wait.until(EC.element_to_be_clickable(self.set_password)).click()
+            logging.info("Botão 'Definir senha' clicado com sucesso após repetir o clique.")
+      except Exception as e:
         logging.error(f"Erro ao acessar 'Definir senha': {e}")
         raise
+
   
     def send_new_code(self):
         """
