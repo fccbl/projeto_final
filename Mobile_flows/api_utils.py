@@ -11,7 +11,6 @@ EMAIL = os.getenv("EMAIL")
 PASSWORD = os.getenv("PASSWORD")
 
 
-
 def get_token():
     """Faz login e retorna o token de acesso"""
     url = f"{API_URL}/auth/login"

@@ -8,6 +8,8 @@ class BasePage:
 
     def find_element(self, by, locator):
         return self.wait.until(EC.presence_of_element_located((by, locator)))
+    
+
 
     def click_element(self, by, locator):
         self.find_element(by, locator).click()
@@ -34,5 +36,6 @@ class BasePage:
         self.find_element(by, locator).clear()
 
     def navigate(self):
-      self.driver.get(self.url)
-    
+        self.driver.get(self.url)
+
+   

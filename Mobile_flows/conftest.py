@@ -19,7 +19,8 @@ def driver():
         "appium:adbExecTimeout": 60000,
         "appium:newCommandTimeout": 120,
         "appium:uiautomator2ServerLaunchTimeout": 60000,
-        "appium:uiautomator2ServerInstallTimeout": 60000
+        "appium:uiautomator2ServerInstallTimeout": 60000,
+        "appium:autoGrantPermissions": True
     })
 
     # Conecta ao servidor Appium
