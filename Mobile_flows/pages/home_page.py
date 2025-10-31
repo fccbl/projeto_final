@@ -22,11 +22,7 @@ class HomePage(BasePage):
       self.product_title_on_details = "//android.widget.TextView[1]"
       self.apple_watch = 'new UiSelector().descriptionContains("Apple Watch se gps Caixa prateada de alumínio")'
       self.macbook = 'new UiSelector().descriptionContains("MacBook Air 13")'
-
-
-
-    #def open_americanas(self):
-     #  logging.info("O aplicativo das Americanas foi aberto")
+      
 
     def search_products_1(self):
         product_name = get_wishlist_products()[0]["Product"]

@@ -1,17 +1,18 @@
 from pages.home_page import HomePage
-from pages.prod2_validate import Validade_Product_2
+from pages.apple_watch import Second_Product
 
 
 def test_mobile_flows(driver):
     home_page = HomePage(driver)
-    prod2_validate = Validade_Product_2(driver)
+    apple_watch = Second_Product(driver)
 
     #home_page.search_products_1()
      #home_page.search_products_2()
     # home_page.search_products_3()
    
    
-    prod2_validate.search_products_2()
-    prod2_validate.validade_name_price()
-    prod2_validate.validade_zip_code()
-    
+    apple_watch.search_products_2()
+    apple_watch.validade_name_price()
+    apple_watch.validade_zip_code()
+    apple_watch.buy_product()
+    apple_watch.cart_poup_up()
