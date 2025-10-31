@@ -20,7 +20,8 @@ def driver():
         "appium:newCommandTimeout": 120,
         "appium:uiautomator2ServerLaunchTimeout": 60000,
         "appium:uiautomator2ServerInstallTimeout": 60000,
-        "appium:autoGrantPermissions": True
+        "appium:autoGrantPermissions": True,
+        "appium:connectHardwareKeyboard": True,                   # Allows physical keyboard
     })
 
     # Conecta ao servidor Appium
