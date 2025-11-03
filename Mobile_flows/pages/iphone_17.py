@@ -29,25 +29,32 @@ class First_Product(BasePage):
       self.two_quantify = 'new UiSelector().className("android.widget.EditText")'
       self.iphone_name_validate = 'new UiSelector().resourceId("Card Produto")'
       self.calculator_zip_code = "Calcular"
-      self.access_cart = self.access_cart = 'new UiSelector().resourceId("adicionar e ir para a cesta")'
+      self.access_cart = 'new UiSelector().resourceId("adicionar e ir para a cesta")'
       self.validate_name_cart = 'new UiSelector().resourceId("Card Produto")'
       self.validate_quantify_cart = 'new UiSelector().text("2")'
       self.add_cart = 'new UiSelector().resourceId("adicionar e continuar comprando")'
-      self.car = 'new UiSelector().resourceId("Carrinho")'
-      self.subtotal_price = 'new UiSelector().className("android.view.View").index(4)'
-      self.total_price = 'new UiSelector().resourceId("Fechar pedido")'
+      self.cart_button = 'new UiSelector().resourceId("Carrinho")'
+      self.subtotal_price = 'new UiSelector().descriptionContains("R$").instance(0)'
+      self.total_price = 'new UiSelector().descriptionContains("R$").instance(1)'
+      self.place_order = 'new UiSelector().resourceId("Fechar pedido")'
+      self.total_price_checkout = 'new UiSelector().resourceId("Fechar pedido")'
       self.validate_message_email = 'new UiSelector().description("Informe seu e-mail para continuar")'
+      self.product_quantify = 'new UiSelector().className("android.widget.EditText")'
+      self.message_cep = 'new UiSelector().description("Receba em até 12 dias úteis: Grátis")'
 
     def search_products_1(self):
+        """Busca o primeiro produto retornado pela API e o seleciona no app."""
         product_name = get_wishlist_products()[0]["Product"]
         logging.info(f"O primeiro produto da API é: {product_name}")
 
       
         self.wait.until(EC.visibility_of_element_located((AppiumBy.ACCESSIBILITY_ID, self.search_box)))
         self.click_element(AppiumBy.ACCESSIBILITY_ID, self.search_box)
+        logging.info("Campo de busca localizado e selecionado.")
+
         self.wait.until(EC.presence_of_element_located((AppiumBy.XPATH, self.input_search)))
         self.send_keys_to_element(AppiumBy.XPATH, self.input_search, product_name)
-        logging.info("Buscando o produto no campo de busca")
+        logging.info(f"Produto '{product_name}' inserido no campo de busca.")
         try:
             self.wait.until(EC.presence_of_element_located((AppiumBy.ANDROID_UIAUTOMATOR, self.apple_iphone))).click()
             logging.info(f"✅ Produto '{product_name}' encontrado e clicado.")
@@ -58,139 +65,177 @@ class First_Product(BasePage):
             return product_name
 
     
-    def validade_name_price(self):
-        product = get_wishlist_products()
-        get_product = product[0]["Product"]
-        price_product = product[0]["Price"]
+    def validate_name_price(self):
+       """Valida se o nome e o preço do produto exibidos no app correspondem aos valores retornados pela API.""" 
 
-        app_text = self.find_element(AppiumBy.ANDROID_UIAUTOMATOR, self.iphone_validate).get_attribute("contentDescription")
-        assert get_product == app_text
-        logging.info("Nome de produto validado")
+       products_from_api = get_wishlist_products()
+       expected_product_name = products_from_api[0]["Product"]
+       expected_product_price  = products_from_api[0]["Price"]
 
-        price_app =self.find_element(AppiumBy.ANDROID_UIAUTOMATOR, self.iphone_price).get_attribute("contentDescription")
-        price_americanas = price_app.replace("R$", "").strip()
-        assert price_americanas == price_product
-        logging.info("Preço validado")
+       app_product_name= self.find_element(AppiumBy.ANDROID_UIAUTOMATOR, self.iphone_validate).get_attribute("contentDescription")
+       assert expected_product_name == app_product_name, f"Nome divergente. Esperado: '{expected_product_name}', Obtido: '{app_product_name}'"
+       logging.info(f"Nome do produto validado com sucesso: '{app_product_name}'.")
+
+       app_price_text =self.find_element(AppiumBy.ANDROID_UIAUTOMATOR, self.iphone_price).get_attribute("contentDescription")
+       app_price_clean = app_price_text.replace("R$", "").strip()
+       assert app_price_clean == expected_product_price, f"Preço divergente. Esperado: '{expected_product_price}', Obtido: '{app_price_clean}'"
+       logging.info(f"Preço do produto validado com sucesso: '{app_price_clean}'.")
 
     def validade_zip_code(self):
-        zip_code_api= get_wishlist_products()
-        code_api = zip_code_api[0]["Zipcode"]
+        """Valida o comportamento do campo de CEP, testando um CEP inválido e um válido da API."""
+
+        products_from_api= get_wishlist_products()
+        expected_zip_code = products_from_api[0]["Zipcode"]
 
         self.find_element(AppiumBy.ANDROID_UIAUTOMATOR,'new UiScrollable(new UiSelector().scrollable(true)).scrollForward()')
-        logging.info("Scroll")
+        logging.info("Scroll realizado")
+
         self.find_element(AppiumBy.ANDROID_UIAUTOMATOR, self.input_zip_code)
         self.click_element(AppiumBy.ANDROID_UIAUTOMATOR, self.input_zip_code)
-        logging.info("ZipCode clicado")
+        logging.info(" Campo de CEP clicado.")
+
         self.send_keys_to_element(AppiumBy.ANDROID_UIAUTOMATOR,self.input_zip_code, "00000000")
-        logging.info("Introduzi um cep invalido")
+        logging.info("CEP inválido inserido para validação de erro.")
+
+        self.wait.until(EC.element_to_be_clickable((AppiumBy.ACCESSIBILITY_ID, self.calculator_zip_code))).click()
+        self.is_element_displayed(AppiumBy.ID, self.alert_zip_code)
+        logging.info("Mensagem de frete indisponível exibida corretamente.")
+
+        self.send_keys_to_element(AppiumBy.ANDROID_UIAUTOMATOR, self.input_zip_code, expected_zip_code)
+        logging.info(f" CEP válido '{expected_zip_code}' inserido no campo.")
 
         self.wait.until(EC.element_to_be_clickable((AppiumBy.ACCESSIBILITY_ID, self.calculator_zip_code))).click()
 
-        self.is_element_displayed(AppiumBy.ID, self.alert_zip_code)
-        logging.info("Mensagem de frete indisponivel na tela")
-        self.send_keys_to_element(AppiumBy.ANDROID_UIAUTOMATOR, self.input_zip_code, code_api)
-        logging.info("Cep valido digitado")
+        message =self.find_element(AppiumBy.ANDROID_UIAUTOMATOR, self.message_cep)
+        assert message.is_displayed(), " Mensagem de entrega não exibida na tela."
+        logging.info(" Mensagem 'Receba em até 12 dias úteis: Grátis' exibida corretamente.") 
       
 
     def buy_product(self):
+       """Clica no botão 'Comprar agora' para iniciar o processo de compra do produto."""
+       
        self.click_element(AppiumBy.ANDROID_UIAUTOMATOR, self.by_button)
-       logging.info("Botao comprar clicado")
+       logging.info(" Botão 'Comprar agora' clicado com sucesso.")
 
 
-    def cart_poup_up(self):
-        product = get_wishlist_products()
-        name_product = product[0]["Product"]
-        price_product = product[0]["Price"]
+    def cart_poupup(self):
+        """Valida nome, preço e quantidade do produto no popup do carrinho, incluindo botões '+' e '-'."""
+
+        product_api = get_wishlist_products()[0]
+        api_name, api_price = product_api["Product"], product_api["Price"]
 
         element_poup_up = self.find_element(AppiumBy.ANDROID_UIAUTOMATOR, self.iphone_name_validate)
         validate_poup_up= element_poup_up.get_attribute("contentDescription")
 
-        assert name_product in validate_poup_up, f" Nome divergente: API={name_product}, App={validate_poup_up}"
-        logging.info("Confirmando o nome do produto no cart poup-up")
-        assert price_product in validate_poup_up, f" Preço divergente: API={price_product}, App={validate_poup_up}"
-        logging.info("Confirmando o preço do produto no cart poup-up")
+           #  Validação nome/preço no popup 
+        popup_element = self.find_element(AppiumBy.ANDROID_UIAUTOMATOR, self.iphone_name_validate)
+        popup_content = popup_element.get_attribute("contentDescription")
+ 
+        assert api_name in popup_content, f" Nome divergente: API={api_name}, App={popup_content}"
+        logging.info(" Nome do produto confirmado no popup.")
 
+        assert api_price in popup_content, f" Preço divergente: API={api_price}, App={popup_content}"
+        logging.info("Preço do produto confirmado no popup.")
+
+         
         self.wait.until(EC.element_to_be_clickable((AppiumBy.XPATH, self.increase_quantify))).click()
-        logging.info("Clique no +")
+        logging.info("Clique no botão '+'.")
 
         self.wait.until(EC.text_to_be_present_in_element((AppiumBy.ANDROID_UIAUTOMATOR, self.two_quantify), "2"))
-        logging.info("Quantidade atualizada para 2")
+        logging.info("Quantidade atualizada para 2.")
     
         self.wait.until(EC.element_to_be_clickable((AppiumBy.ANDROID_UIAUTOMATOR, self.decrease_quantify))).click()
-        logging.info("Diminuindo 1 quantifade")
+        logging.info("Quantidade atualizada para 1.")
 
-        # cart_button= self.wait.until(EC.element_to_be_clickable((AppiumBy.ANDROID_UIAUTOMATOR, self.decrease_quantify)))
-        # assert not cart_button.is_enabled()
-        # logging.info(f"Estado do botão: {cart_button.is_enabled()}")
+
+        # Captura o valor antes e depois do clique
+        initial_quantity = self.find_element(AppiumBy.ANDROID_UIAUTOMATOR, self.product_quantify).get_attribute("text")
+        self.click_element(AppiumBy.ANDROID_UIAUTOMATOR, self.decrease_quantify)
+        final_quantity = self.find_element(AppiumBy.ANDROID_UIAUTOMATOR, self.product_quantify).get_attribute("text")
+
+        assert initial_quantity == final_quantity, f"O botão '-' parece estar ativo — quantidade mudou de {initial_quantity} para {final_quantity}"
+        logging.info(f" Botão '-' está inativo — quantidade permaneceu em {initial_quantity}")
 
         self.wait.until(EC.element_to_be_clickable((AppiumBy.XPATH, self.increase_quantify))).click()
-        logging.info("Clique no +")
+        logging.info("Clique no botão '+'.")
 
         self.wait.until(EC.text_to_be_present_in_element((AppiumBy.ANDROID_UIAUTOMATOR, self.two_quantify), "2"))
         logging.info("Quantidade atualizada para 2")
 
-    def go_to_cart(self):
-        self.click_element(AppiumBy.ANDROID_UIAUTOMATOR, self.add_cart)
-        logging.info("adicionando o produto para a tela de carrinho")
-
-        self.click_element(AppiumBy.ANDROID_UIAUTOMATOR, self.car)
-
+    def click_checkout(self):
+       """Realiza o clique no botão 'Finalizar compra' usando coordenadas fixas."""
+       x, y = 500, 2050
+       self.driver.execute_script("mobile: clickGesture", {"x": x, "y": y})
+       logging.info(f"Clique executado nas coordenadas ({x}, {y}) para o botão 'Finalizar compra'.")
 
  
     def page_car(self):
-        product = get_wishlist_products()
-        name_product_expected = product[0]["Product"]
-        price_product_expect = product[0]["Price"]
-        code_api = product[0]["Zipcode"]
-       
-        #Converte a string "12.418,80" em número 12418.80
-        price_product_expect = float(price_product_expect.replace('.', '').replace(',', '.'))
-        total_price = price_product_expect * 2
+         """Valida o carrinho confirmando nome, preços, quantidade, CEPs e a exibição da tela de login/check-out."""
+         product = get_wishlist_products()[0]
+         api_name = product["Product"]
+         api_price = float(product["Price"].replace('.', '').replace(',', '.'))
+         api_zip = product["Zipcode"]
+         expected_total = api_price * 2
 
-        element = self.find_element(AppiumBy.ANDROID_UIAUTOMATOR, self.validate_name_cart)
-        name_product_app= element.get_attribute("contentDescription")
+         app_name = self.find_element(AppiumBy.ANDROID_UIAUTOMATOR, self.validate_name_cart).get_attribute("contentDescription")
+         assert api_name in app_name, f"❌ Nome divergente: API={api_name}, App={app_name}"
+         logging.info("Nome do produto validado no carrinho")
 
-        assert name_product_expected in name_product_app, f" Nome divergente: API={name_product_expected}, App={name_product_app}"
-        logging.info("Confirmando o nome do produto no carrinho")
+         self.wait.until(EC.text_to_be_present_in_element((AppiumBy.ANDROID_UIAUTOMATOR, self.validate_quantify_cart), "2"))
+         logging.info("Quantidade validada: 2 unidades.")
 
-        self.wait.until(EC.text_to_be_present_in_element((AppiumBy.ANDROID_UIAUTOMATOR, self.validate_quantify_cart), "2"))
-        logging.info("Quantidade igual a 2")
+         self.find_element(AppiumBy.ANDROID_UIAUTOMATOR, self.input_zip_code)
+         self.click_element(AppiumBy.ANDROID_UIAUTOMATOR, self.input_zip_code)
+         self.send_keys_to_element(AppiumBy.ANDROID_UIAUTOMATOR,self.input_zip_code, "00000000")
+         logging.info("CEP inválido inserido para validação de erro.")
 
-        price = self.find_element(AppiumBy.ANDROID_UIAUTOMATOR, self.subtotal_price).get_attribute("contentDescription")
-        price = float(price.replace('R$', '').replace('Por', '').replace('\xa0', '').replace('.', '').replace(',', '.').strip())
+         self.wait.until(EC.element_to_be_clickable((AppiumBy.ACCESSIBILITY_ID, self.calculator_zip_code))).click()
+
+         self.is_element_displayed(AppiumBy.ID, self.alert_zip_code)
+         logging.info("Mensagem de frete indisponível exibida corretamente.")
+         self.send_keys_to_element(AppiumBy.ANDROID_UIAUTOMATOR, self.input_zip_code, api_zip)
+         logging.info(f" CEP válido '{api_zip}' inserido no campo.")
+
+         self.wait.until(EC.element_to_be_clickable((AppiumBy.ACCESSIBILITY_ID, self.calculator_zip_code))).click()
+
+         message =self.find_element(AppiumBy.ANDROID_UIAUTOMATOR, self.message_cep)
+         assert message.is_displayed(), " Mensagem de entrega não exibida na tela."
+         logging.info(" Mensagem 'Receba em até 12 dias úteis: Grátis' exibida corretamente.") 
+
+         self.find_element(AppiumBy.ANDROID_UIAUTOMATOR,'new UiScrollable(new UiSelector().scrollable(true)).scrollForward()')
+         logging.info("Scroll realizado")
+
+         subtotal_price_text = self.find_element(AppiumBy.ANDROID_UIAUTOMATOR, self.subtotal_price).get_attribute("contentDescription")
+         subtotal_price = float(subtotal_price_text.replace('R$', '').replace('\xa0', '').replace('.', '').replace(',', '.').strip())
+        
+         assert subtotal_price == expected_total, f"Valor esperado era {expected_total}, mas foi {subtotal_price}"
+         logging.info("Confirmando que o valor subtotal é o dobro do valor unitário.")
+
+        
+         total_price_text = self.find_element(AppiumBy.ANDROID_UIAUTOMATOR, self.total_price).get_attribute("contentDescription")
+         total_price_app = float(total_price_text.replace('R$', '').replace('\xa0', '').replace('.', '').replace(',', '.').strip())
 
 
-        assert price == total_price, f"Valor esperado era {total_price}, mas foi {price}"
-        logging.info("Confirmando o valor subtotal o dobro do valor unitario")
+         assert total_price_app == expected_total, f"Valor esperado era {expected_total}, mas foi {total_price_app}"
+         logging.info("Confirmando que o valor total é o dobro do valor unitário.")
 
-        total_price_app = self.find_element(AppiumBy.ANDROID_UIAUTOMATOR, self.total_price).get_attribute("contentDescription")
-        total_price_app = total_price_app.replace('R$', '').replace('fechar pedido', '').replace('\n', '').replace('.', '').replace(',', '.').strip()
-        total_price_app = float(total_price_app)
+         total_checkout_text = self.find_element(AppiumBy.ANDROID_UIAUTOMATOR, self.total_price_checkout).get_attribute("contentDescription")
+         total_app = total_checkout_text.replace('R$', '').replace('fechar pedido', '').replace('\n', '').replace('.', '').replace(',', '.').strip()
+         total_checkout = float(total_app)
 
-        assert total_price_app == total_price, f"Valor total divergente! Esperado: {total_price}, App: {total_price_app}"
-        logging.info("Confirmando que o valor total é o dobro do unitário")
+         assert total_checkout == expected_total, f"Valor total divergente! Esperado: {expected_total}, App: {total_app}"
+         logging.info("Confirmando que o valor total do checkout é o dobro do unitário")
 
-        self.find_element(AppiumBy.ANDROID_UIAUTOMATOR, self.input_zip_code)
-        self.click_element(AppiumBy.ANDROID_UIAUTOMATOR, self.input_zip_code)
-        self.send_keys_to_element(AppiumBy.ANDROID_UIAUTOMATOR,self.input_zip_code, "00000000")
-        logging.info("Introduzi um cep invalido")
-
-        self.wait.until(EC.element_to_be_clickable((AppiumBy.ACCESSIBILITY_ID, self.calculator_zip_code))).click()
-
-        self.is_element_displayed(AppiumBy.ID, self.alert_zip_code)
-        logging.info("Mensagem de frete indisponivel na tela")
-        self.send_keys_to_element(AppiumBy.ANDROID_UIAUTOMATOR, self.input_zip_code, code_api)
-        logging.info("Cep valido digitado")
       
-        self.click_element(AppiumBy.ANDROID_UIAUTOMATOR, self.total_price)
-        logging.info("Clique check-out")
+         self.click_element(AppiumBy.ANDROID_UIAUTOMATOR, self.place_order)
+         logging.info("Clique check-out")
 
       
-        element = self.wait.until(EC.presence_of_element_located((AppiumBy.ANDROID_UIAUTOMATOR, self.validate_message_email)))
+         element = self.wait.until(EC.presence_of_element_located((AppiumBy.ANDROID_UIAUTOMATOR, self.validate_message_email)))
 
 
-        assert element.is_displayed(), "❌ Mensagem 'Informe seu e-mail para continuar' não foi exibida!"
-        logging.info("✅ Mensagem 'Informe seu e-mail para continuar' exibida na tela.")
+         assert element.is_displayed(), "❌ Mensagem 'Informe seu e-mail para continuar' não foi exibida!"
+         logging.info("✅ Mensagem 'Informe seu e-mail para continuar' exibida na tela.")
 
        
 
