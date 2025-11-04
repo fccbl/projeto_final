@@ -251,6 +251,8 @@ class First_Product(BasePage):
          assert element.is_displayed(), " Mensagem 'Informe seu e-mail para continuar' não foi exibida!"
          logging.info(" Mensagem 'Informe seu e-mail para continuar' exibida na tela.")
 
+        
+
        
 
 
