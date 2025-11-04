@@ -10,11 +10,12 @@ def test_mobile_flows(driver):
 
 
     iphone_17.search_products_1()
-    iphone_17.validade_name_price()
-    iphone_17.validade_zip_code()
+    iphone_17.validate_name_price()
+    iphone_17.validate_zip_code()
     iphone_17.buy_product()
-    iphone_17.cart_poup_up()
- 
+    iphone_17.cart_poupup()
+    iphone_17.click_checkout()
+    iphone_17.page_car()
    
     #SecondProduct
     # apple_watch.search_products_2()
@@ -27,7 +28,10 @@ def test_mobile_flows(driver):
 
    #ThirdProduct
     # macbook_air.search_products_3()
-    # macbook_air.validade_name_price()
-    # macbook_air.validade_zip_code()
+    # macbook_air.validate_name_price()
+    # macbook_air.validate_zip_code()
     # macbook_air.buy_product()
     # macbook_air.cart_poup_up()
+    # macbook_air.validate_quantity_change()
+    # macbook_air.click_checkout()
+    # macbook_air.page_car()

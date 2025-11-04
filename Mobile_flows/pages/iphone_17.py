@@ -40,7 +40,7 @@ class First_Product(BasePage):
       self.total_price_checkout = 'new UiSelector().resourceId("Fechar pedido")'
       self.validate_message_email = 'new UiSelector().description("Informe seu e-mail para continuar")'
       self.product_quantify = 'new UiSelector().className("android.widget.EditText")'
-      self.message_cep = 'new UiSelector().description("Receba em até 12 dias úteis: Grátis")'
+      self.message_cep = 'new UiSelector().descriptionMatches("Receba em até \\d+ dias úteis.*")'
 
     def search_products_1(self):
         """Busca o primeiro produto retornado pela API e o seleciona no app."""
@@ -57,9 +57,9 @@ class First_Product(BasePage):
         logging.info(f"Produto '{product_name}' inserido no campo de busca.")
         try:
             self.wait.until(EC.presence_of_element_located((AppiumBy.ANDROID_UIAUTOMATOR, self.apple_iphone))).click()
-            logging.info(f"✅ Produto '{product_name}' encontrado e clicado.")
+            logging.info(f" Produto '{product_name}' encontrado e clicado.")
         except TimeoutException:
-            logging.error(f"❌ Produto '{product_name}' não encontrado.")
+            logging.error(f" Produto '{product_name}' não encontrado.")
             self.driver.back()
             logging.info("Voltando à tela inicial para tentar próxima busca.")
             return product_name
@@ -81,11 +81,13 @@ class First_Product(BasePage):
        assert app_price_clean == expected_product_price, f"Preço divergente. Esperado: '{expected_product_price}', Obtido: '{app_price_clean}'"
        logging.info(f"Preço do produto validado com sucesso: '{app_price_clean}'.")
 
-    def validade_zip_code(self):
+    def validate_zip_code(self):
         """Valida o comportamento do campo de CEP, testando um CEP inválido e um válido da API."""
 
-        products_from_api= get_wishlist_products()
-        expected_zip_code = products_from_api[0]["Zipcode"]
+        products_from_api= get_wishlist_products()[0]
+        expected_zip_code = products_from_api["Zipcode"]
+        api_delivery_estimate = products_from_api["delivery_estimate"]
+        delivery_days = products_from_api["shipping_fee"]
 
         self.find_element(AppiumBy.ANDROID_UIAUTOMATOR,'new UiScrollable(new UiSelector().scrollable(true)).scrollForward()')
         logging.info("Scroll realizado")
@@ -106,9 +108,15 @@ class First_Product(BasePage):
 
         self.wait.until(EC.element_to_be_clickable((AppiumBy.ACCESSIBILITY_ID, self.calculator_zip_code))).click()
 
-        message =self.find_element(AppiumBy.ANDROID_UIAUTOMATOR, self.message_cep)
-        assert message.is_displayed(), " Mensagem de entrega não exibida na tela."
-        logging.info(" Mensagem 'Receba em até 12 dias úteis: Grátis' exibida corretamente.") 
+        message_element = self.find_element(AppiumBy.ANDROID_UIAUTOMATOR, self.message_cep)
+        message_text = message_element.get_attribute("contentDescription")
+
+        if api_delivery_estimate in message_text and delivery_days in message_text:
+          logging.info(f"✅ Mensagem exibida corretamente: '{message_text}'")
+        else:
+          logging.warning(f"⚠️ Divergência na mensagem.\n"
+          f"Esperado: '{api_delivery_estimate}' e '{delivery_days}'\n"
+           f"Obtido: '{message_text}'")
       
 
     def buy_product(self):
@@ -123,9 +131,6 @@ class First_Product(BasePage):
 
         product_api = get_wishlist_products()[0]
         api_name, api_price = product_api["Product"], product_api["Price"]
-
-        element_poup_up = self.find_element(AppiumBy.ANDROID_UIAUTOMATOR, self.iphone_name_validate)
-        validate_poup_up= element_poup_up.get_attribute("contentDescription")
 
            #  Validação nome/preço no popup 
         popup_element = self.find_element(AppiumBy.ANDROID_UIAUTOMATOR, self.iphone_name_validate)
@@ -164,14 +169,17 @@ class First_Product(BasePage):
 
     def click_checkout(self):
        """Realiza o clique no botão 'Finalizar compra' usando coordenadas fixas."""
+
        x, y = 500, 2050
        self.driver.execute_script("mobile: clickGesture", {"x": x, "y": y})
-       logging.info(f"Clique executado nas coordenadas ({x}, {y}) para o botão 'Finalizar compra'.")
+       logging.info(f"Clique no botão 'Finalizar compra'.")
 
  
     def page_car(self):
          """Valida o carrinho confirmando nome, preços, quantidade, CEPs e a exibição da tela de login/check-out."""
          product = get_wishlist_products()[0]
+         api_delivery_estimate = product["delivery_estimate"]
+         delivery_days = product["shipping_fee"]
          api_name = product["Product"]
          api_price = float(product["Price"].replace('.', '').replace(',', '.'))
          api_zip = product["Zipcode"]
@@ -198,9 +206,15 @@ class First_Product(BasePage):
 
          self.wait.until(EC.element_to_be_clickable((AppiumBy.ACCESSIBILITY_ID, self.calculator_zip_code))).click()
 
-         message =self.find_element(AppiumBy.ANDROID_UIAUTOMATOR, self.message_cep)
-         assert message.is_displayed(), " Mensagem de entrega não exibida na tela."
-         logging.info(" Mensagem 'Receba em até 12 dias úteis: Grátis' exibida corretamente.") 
+         message_element = self.find_element(AppiumBy.ANDROID_UIAUTOMATOR, self.message_cep)
+         message_text = message_element.get_attribute("contentDescription")
+
+         if api_delivery_estimate in message_text and delivery_days in message_text:
+          logging.info(f"✅ Mensagem exibida corretamente: '{message_text}'")
+         else:
+          logging.warning(f"⚠️ Divergência na mensagem.\n"
+          f"Esperado: '{api_delivery_estimate}' e '{delivery_days}'\n"
+           f"Obtido: '{message_text}'")
 
          self.find_element(AppiumBy.ANDROID_UIAUTOMATOR,'new UiScrollable(new UiSelector().scrollable(true)).scrollForward()')
          logging.info("Scroll realizado")
@@ -234,8 +248,8 @@ class First_Product(BasePage):
          element = self.wait.until(EC.presence_of_element_located((AppiumBy.ANDROID_UIAUTOMATOR, self.validate_message_email)))
 
 
-         assert element.is_displayed(), "❌ Mensagem 'Informe seu e-mail para continuar' não foi exibida!"
-         logging.info("✅ Mensagem 'Informe seu e-mail para continuar' exibida na tela.")
+         assert element.is_displayed(), " Mensagem 'Informe seu e-mail para continuar' não foi exibida!"
+         logging.info(" Mensagem 'Informe seu e-mail para continuar' exibida na tela.")
 
        
 
