@@ -62,15 +62,15 @@ class First_Product(BasePage):
             logging.error(f" Produto '{product_name}' não encontrado.")
             self.driver.back()
             logging.info("Voltando à tela inicial para tentar próxima busca.")
-            return product_name
+            
 
     
     def validate_name_price(self):
        """Valida se o nome e o preço do produto exibidos no app correspondem aos valores retornados pela API.""" 
 
-       products_from_api = get_wishlist_products()
-       expected_product_name = products_from_api[0]["Product"]
-       expected_product_price  = products_from_api[0]["Price"]
+       products_from_api = get_wishlist_products()[0]
+       expected_product_name = products_from_api["Product"]
+       expected_product_price  = products_from_api["Price"]
 
        app_product_name= self.find_element(AppiumBy.ANDROID_UIAUTOMATOR, self.iphone_validate).get_attribute("contentDescription")
        assert expected_product_name == app_product_name, f"Nome divergente. Esperado: '{expected_product_name}', Obtido: '{app_product_name}'"
@@ -94,7 +94,7 @@ class First_Product(BasePage):
 
         self.find_element(AppiumBy.ANDROID_UIAUTOMATOR, self.input_zip_code)
         self.click_element(AppiumBy.ANDROID_UIAUTOMATOR, self.input_zip_code)
-        logging.info(" Campo de CEP clicado.")
+        logging.info("Campo de CEP clicado.")
 
         self.send_keys_to_element(AppiumBy.ANDROID_UIAUTOMATOR,self.input_zip_code, "00000000")
         logging.info("CEP inválido inserido para validação de erro.")
@@ -132,7 +132,7 @@ class First_Product(BasePage):
         product_api = get_wishlist_products()[0]
         api_name, api_price = product_api["Product"], product_api["Price"]
 
-           #  Validação nome/preço no popup 
+           
         popup_element = self.find_element(AppiumBy.ANDROID_UIAUTOMATOR, self.iphone_name_validate)
         popup_content = popup_element.get_attribute("contentDescription")
  

@@ -9,20 +9,23 @@ def test_mobile_flows(driver):
     macbook_air = Third_Product(driver)
 
 
-    iphone_17.search_products_1()
-    iphone_17.validate_name_price()
-    iphone_17.validate_zip_code()
-    iphone_17.buy_product()
-    iphone_17.cart_poupup()
-    iphone_17.click_checkout()
-    iphone_17.page_car()
+    # iphone_17.search_products_1()
+    # iphone_17.validate_name_price()
+    # iphone_17.validate_zip_code()
+    # iphone_17.buy_product()
+    # iphone_17.cart_poupup()
+    # iphone_17.click_checkout()
+    # iphone_17.page_car()
    
     #SecondProduct
-    # apple_watch.search_products_2()
-    # apple_watch.validade_name_price()
-    # apple_watch.validade_zip_code()
-    # apple_watch.buy_product()
-    # apple_watch.cart_poup_up()
+    apple_watch.search_products_2()
+    apple_watch.validade_name_price()
+    apple_watch.validade_zip_code()
+    apple_watch.buy_product()
+    apple_watch.cart_poup_up()
+    apple_watch.validate_quantity_change()
+    apple_watch.click_checkout()
+    apple_watch.page_car()
 
 
 

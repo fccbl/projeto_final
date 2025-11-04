@@ -58,7 +58,7 @@ class Third_Product(BasePage):
         except TimeoutException:
             logging.error(f"❌ Produto '{get_product}' não encontrado.")
 
-        return get_product
+        
     
     def validate_name_price(self):
         """Valida se o nome e o preço do produto exibidos no app correspondem aos valores retornados pela API.""" 
@@ -152,13 +152,13 @@ class Third_Product(BasePage):
            
             time.sleep(2)
 
-            # Captura quantidade após o clique
+            
             updated_qty = self.find_element(AppiumBy.ANDROID_UIAUTOMATOR, self.one_quantify).get_attribute("text")
             logging.info(f"🔵 Quantidade após clique: {updated_qty}")
 
           
             if initial_qty == updated_qty:
-                logging.warning("⚠️ Quantidade não mudou após o clique — possível bug no app.")
+                logging.warning("⚠️ Quantidade não mudou após o clique.")
             else:
                 logging.info(f"✅ Quantidade alterada de {initial_qty} para {updated_qty}.")
         
