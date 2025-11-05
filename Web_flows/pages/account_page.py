@@ -24,6 +24,7 @@ class MyAccountPage():
         self.resend_code_button = (By.CSS_SELECTOR, "div.vtex-my-authentication-1-x-resendCodeButton_container button")
         self.codigo_email_message = (By.CSS_SELECTOR, "span[data-qa='message-subject']")
         self.code_message = (By.CSS_SELECTOR, "h1[data-qa='message-subject']")
+        self.logout_button = (By.XPATH, "//div[contains(@class, 'vtex-my-account-1-x-menuLink') and contains(text(), 'Sair')]")
 
     def account_button_click(self,email):
         """Clica no botão 'Minha Conta' e valida o e-mail exibido."""
@@ -147,14 +148,14 @@ class MyAccountPage():
 
     def test_password_validation_and_save(self):
       """Valida se a senha foi salva exibindo apenas '*' na tela."""
-      wait_dedicado = WebDriverWait(self.driver, 45)
       try:
-           
-        wait_dedicado.until(EC.text_to_be_present_in_element(self.success_field, "*"),
-        "Tempo limite excedido: O texto da máscara ('*') não foi renderizado após salvar a senha.")
-        logging.info("✅ Senha salva com sucesso — sequência de '*' exibida corretamente.")
-        
-      except TimeoutException as e:
-        # Trata a falha de sincronização.
-        logging.error(f"❌ Falha de Sincronização: Tempo esgotado. {e.msg}")
-        raise AssertionError("Teste falhou: O indicador de sucesso (máscara) não ficou visível a tempo.")
+        self.wait.until(
+            EC.text_to_be_present_in_element(self.success_field, "*")
+        )
+        logging.info("✅ Senha salva e máscara de '*' exibida corretamente na tela.")
+      except TimeoutException:
+        logging.error("❌ Falha ao validar a máscara de senha — '*' não apareceu a tempo.")
+        raise AssertionError("Erro: A máscara de senha ('*') não foi exibida após o salvamento.")
+      
+      self.wait.until(EC.element_to_be_clickable(self.logout_button)).click()
+      logging.info("Sessão encerrada")
