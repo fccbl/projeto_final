@@ -10,6 +10,7 @@ def test_product_iphone_17(driver):
     iphone_17.validate_zip_code()
     iphone_17.buy_product()
     iphone_17.cart_poupup()
+    iphone_17.validate_quantity_change()
     iphone_17.click_checkout()
     iphone_17.page_car()
    

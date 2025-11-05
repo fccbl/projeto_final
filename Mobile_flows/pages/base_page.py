@@ -38,4 +38,5 @@ class BasePage:
     def navigate(self):
         self.driver.get(self.url)
 
+  
    

@@ -1,8 +1,7 @@
 import pytest
 from appium import webdriver
 from appium.options.common.base import AppiumOptions
-import json
-from pathlib import Path
+
 
 
 @pytest.fixture(scope="function")
@@ -37,10 +36,4 @@ def driver():
     _driver.quit()
 
 
-@pytest.fixture(scope="session")
-def appium_test_capabilities():
-    """Lê o JSON de capabilities e retorna como dicionário"""
-    json_path = Path(__file__).parent / "data" / "data_test.json"
-    with open(json_path, "r", encoding="utf-8") as f:
-        data = json.load(f)
-    return data
+

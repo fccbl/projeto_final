@@ -1,0 +1,42 @@
+2025-11-05 09:48:34 - [32mINFO[0m - Nenhum poupup foi exibido
+2025-11-05 09:48:34 - [32mINFO[0m - Botão de login visível na tela.
+2025-11-05 09:48:37 - [32mINFO[0m - Clique no botão de login realizado com sucesso!
+2025-11-05 09:48:39 - [32mINFO[0m - Nova aba aberta: Temp-Mail
+2025-11-05 09:48:41 - [32mINFO[0m - E-mail temporário copiado: 9ohpqwrdxa@bwmyga.com
+2025-11-05 09:48:41 - [32mINFO[0m - Voltando para a aba da Americanas
+2025-11-05 09:48:42 - [32mINFO[0m - E-mail 9ohpqwrdxa@bwmyga.com preenchido no campo de login
+2025-11-05 09:48:43 - [32mINFO[0m - Clique no botão Enviar realizado
+2025-11-05 09:48:43 - [32mINFO[0m - Voltando para a aba do Temp-Mail
+2025-11-05 09:48:50 - [32mINFO[0m - Código de acesso capturado: 650446
+2025-11-05 09:48:50 - [32mINFO[0m - Voltando para a aba da Americanas após pegar o código
+2025-11-05 09:48:50 - [32mINFO[0m - Código 650446 preenchido no campo de verificação
+2025-11-05 09:48:50 - [32mINFO[0m - Clique no botão Confirmar realizado
+2025-11-05 09:48:50 - [32mINFO[0m - URL alterada com sucesso: https://www.americanas.com.br/api/io/login
+2025-11-05 09:48:53 - [32mINFO[0m - Login validado: '9ohpqwrdxa' encontrado no cabeçalho
+2025-11-05 09:48:55 - [32mINFO[0m - Clique no botão minha conta
+2025-11-05 09:48:56 - [32mINFO[0m - Email do usuário validado
+2025-11-05 09:48:56 - [32mINFO[0m - Link 'Autenticação' clicado.
+2025-11-05 09:48:57 - [32mINFO[0m - Botão 'Definir senha' clicado com sucesso.
+2025-11-05 09:48:58 - [32mINFO[0m - Botão 'Enviar novo código' clicado
+2025-11-05 09:48:58 - [32mINFO[0m - Voltando para a aba do Temp-Mail
+2025-11-05 09:49:03 - [32mINFO[0m - Página do Temp-Mail atualizada para buscar o novo e-mail.
+2025-11-05 09:49:06 - [32mINFO[0m - Código de acesso capturado: 105728
+2025-11-05 09:49:06 - [32mINFO[0m - Voltando para a aba da Americanas após pegar o código
+2025-11-05 09:49:06 - [32mINFO[0m - Código inserido:105728
+2025-11-05 09:49:06 - [32mINFO[0m - Senha inserida: abc123
+2025-11-05 09:49:28 - [32mINFO[0m - Botão não é clicável
+2025-11-05 09:49:28 - [32mINFO[0m - Botão de salvar é clicável? False
+2025-11-05 09:49:28 - [32mINFO[0m - Senha inserida: abcdefgh
+2025-11-05 09:49:50 - [32mINFO[0m - Botão não é clicável
+2025-11-05 09:49:50 - [32mINFO[0m - Botão de salvar é clicável? False
+2025-11-05 09:49:50 - [32mINFO[0m - Senha inserida: ABCDEFGH
+2025-11-05 09:50:12 - [32mINFO[0m - Botão não é clicável
+2025-11-05 09:50:12 - [32mINFO[0m - Botão de salvar é clicável? False
+2025-11-05 09:50:12 - [32mINFO[0m - Senha inserida: abcd1234
+2025-11-05 09:50:34 - [32mINFO[0m - Botão não é clicável
+2025-11-05 09:50:34 - [32mINFO[0m - Botão de salvar é clicável? False
+2025-11-05 09:50:34 - [32mINFO[0m - Botão 'Salvar' clicável
+2025-11-05 09:50:34 - [32mINFO[0m - Senha válida e botão clicado
+2025-11-05 09:50:34 - [32mINFO[0m - Container do sucesso apareceu
+2025-11-05 09:50:35 - [32mINFO[0m - ✅ Senha salva e máscara de '*' exibida corretamente na tela.
+2025-11-05 09:50:35 - [32mINFO[0m - Sessão encerrada

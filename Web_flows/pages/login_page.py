@@ -9,7 +9,7 @@ import time
 class LoginPage():
      def __init__(self, driver):
         self.driver = driver
-        self.wait = WebDriverWait(driver, 25)
+        self.wait = WebDriverWait(driver, 15)
         self.email_login = (By.NAME, "email")
         self.send_button = (By.CSS_SELECTOR,"button.vtex-button[type='submit']") 
         self.codigo_email_message = (By.CSS_SELECTOR, "span[data-qa='message-subject']")
@@ -71,7 +71,7 @@ class LoginPage():
            self.wait.until(EC.element_to_be_clickable(self.codigo_email_message)).click()
            message_element = self.wait.until(EC.visibility_of_element_located(self.code_message))
            message_text = message_element.text
-       #converter string para inteiro
+
            code_str = message_text.split()[-1]
            code_int = int(code_str)
            logging.info(f"Código de acesso capturado: {code_int}")

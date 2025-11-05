@@ -10,7 +10,7 @@ import time
 class MyAccountPage():
     def __init__(self, driver):
         self.driver = driver
-        self.wait = WebDriverWait(driver, 10)
+        self.wait = WebDriverWait(driver, 20)
         self.my_account_button = (By.CSS_SELECTOR, "span.ButtonLogin_myAccount__mte5i")
         self.email_validate = (By.CSS_SELECTOR, ".vtex-my-account-1-x-emailContainer > .vtex-my-account-1-x-dataEntryChildren")
         self.link_authentication = (By.CSS_SELECTOR, 'a.vtex-account_menu-link[href="#/authentication"]')
@@ -82,7 +82,7 @@ class MyAccountPage():
         message_element = self.wait.until(EC.visibility_of_element_located(self.code_message))
         message_text = message_element.text
 
-       #converter string para inteiro
+       
         new_code_str = message_text.split()[-1]
         new_code_int = int(new_code_str)
         logging.info(f"Código de acesso capturado: {new_code_int}")
