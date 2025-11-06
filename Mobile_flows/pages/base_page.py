@@ -38,5 +38,9 @@ class BasePage:
     def navigate(self):
         self.driver.get(self.url)
 
+    def find_elements(self, by, locator):
+         return self.wait.until(
+        EC.presence_of_all_elements_located((by, locator))
+    )
   
    
