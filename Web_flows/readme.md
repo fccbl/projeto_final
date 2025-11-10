@@ -1,15 +1,17 @@
-# Web Flows – Registro de Novo Usuário e Configuração de Senha
+## Web Flows – New User Registration and Password Setup
 
-## Objetivo
-Validar o fluxo completo de **criação de nova conta**, **configuração de senha** e **validação dos dados** no site da Americanas.
+### **Objective**
+Validate the complete flow of creating a new account, setting up a password, and verifying user information on the Americanas website.
 
-## Resumo do Cenário
-- Acessar o site da Americanas.  
-- Navegar para "Login ou Cadastre-se".  
-- Gerar e usar um **e-mail temporário** (Temp-Mail) para registro.  
-- Inserir código de verificação recebido no e-mail.  
-- Validar redirecionamento e exibição do e-mail do usuário.  
-- Configurar senha seguindo as regras de segurança:
-- Pelo menos 8 caracteres  
-- Incluindo números, letras maiúsculas e minúsculas  
-- Validar que a senha foi salva corretamente (mascarada com asteriscos).
+### **Scenario Summary**
+1. Access the Americanas website.  
+2. Navigate to **“Login or Sign Up”**.  
+3. Generate and use a temporary email (Temp-Mail) for registration.  
+4. Enter the verification code received by email.  
+5. Validate the redirection and display of the user's email.  
+6. Set a password following security rules:  
+   - At least 8 characters  
+   - Includes numbers  
+   - Includes uppercase and lowercase letters  
+7. Validate that the password was saved correctly (masked with asterisks).  
+
