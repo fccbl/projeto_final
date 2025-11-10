@@ -102,9 +102,6 @@ class CartPage(BasePage):
          self.is_element_displayed(AppiumBy.ID, self.alert_zip_code)
          logging.info("Mensagem de frete indisponível exibida corretamente")
 
- 
-         campo = self.find_element(AppiumBy.ANDROID_UIAUTOMATOR, self.input_zip_code)
-         campo.clear()
 
          self.send_keys_to_element(AppiumBy.ANDROID_UIAUTOMATOR, self.input_zip_code, expected_zip)
          logging.info(f"CEP válido '{expected_zip}' inserido")

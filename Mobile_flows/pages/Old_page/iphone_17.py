@@ -1,6 +1,6 @@
 from appium.webdriver.common.appiumby import AppiumBy
 from selenium.webdriver.support import expected_conditions as EC
-from .base_page import BasePage
+from ..base_page import BasePage
 import logging
 from selenium.webdriver.support.ui import WebDriverWait
 from api_utils import get_wishlist_products

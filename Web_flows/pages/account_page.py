@@ -10,14 +10,14 @@ import time
 class MyAccountPage():
     def __init__(self, driver):
         self.driver = driver
-        self.wait = WebDriverWait(driver, 20)
+        self.wait = WebDriverWait(driver, 10)
         self.my_account_button = (By.CSS_SELECTOR, "span.ButtonLogin_myAccount__mte5i")
         self.email_validate = (By.CSS_SELECTOR, ".vtex-my-account-1-x-emailContainer > .vtex-my-account-1-x-dataEntryChildren")
         self.link_authentication = (By.CSS_SELECTOR, 'a.vtex-account_menu-link[href="#/authentication"]')
         self.set_password = (By.CSS_SELECTOR,"button.vtex-button[type='button'] > div.vtex-button__label")
         self.input_code = (By.CSS_SELECTOR, ".vtex-my-authentication-1-x-codeInput_container input")
         self.input_password = (By.CSS_SELECTOR, "input[type='password']")
-        self.button = (By.XPATH, "//button[./div[text()='Salvar senha']]")
+        self.button = (By.XPATH, "//button[.//div[text()='Salvar senha']]")
         self.success_field = (By.XPATH, "//div[text()='Senha']/following-sibling::div[contains(@class,'maskedPassword_content')]")
         self.password = "Abcdef12"
         self.container = (By.CSS_SELECTOR,".vtex-my-authentication-1-x-box_content")
@@ -40,25 +40,25 @@ class MyAccountPage():
       Acessa a tela de 'Definir senha' clicando no link de autenticação.
       Se a tela de gerenciamento de sessões aparecer, repete o clique no link.
       """
+      link = self.wait.until(EC.element_to_be_clickable(self.link_authentication))
+      self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", link)
+      link.click()
+      logging.info("Link 'Autenticação' clicado.")
+     
       try:
+        button = self.wait.until(EC.element_to_be_clickable(self.set_password))
+
+      except (TimeoutException, ElementClickInterceptedException):
+        logging.warning("Gerenciamento de sessões detectado — repetindo clique.")
+
         link = self.wait.until(EC.element_to_be_clickable(self.link_authentication))
-        self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", link)
         link.click()
-        logging.info("Link 'Autenticação' clicado.")
 
-        try:
-            self.wait.until(EC.element_to_be_clickable(self.set_password)).click()
-            logging.info("Botão 'Definir senha' clicado com sucesso.")
-        except ElementClickInterceptedException:
-            logging.warning("Tela de gerenciamento de sessões apareceu, repetindo clique no link...")
-            link = self.wait.until(EC.element_to_be_clickable(self.link_authentication))
-            link.click()
-            self.wait.until(EC.element_to_be_clickable(self.set_password)).click()
-            logging.info("Botão 'Definir senha' clicado com sucesso após repetir o clique.")
-      except Exception as e:
-        logging.error(f"Erro ao acessar 'Definir senha': {e}")
-        raise
+        button = self.wait.until(EC.element_to_be_clickable(self.set_password))
 
+ 
+      button.click()
+      logging.info("Botão 'Definir senha' clicado com sucesso.")
   
     def send_new_code(self):
         """
@@ -67,6 +67,7 @@ class MyAccountPage():
         """
         self.wait.until(EC.element_to_be_clickable(self.resend_code_button)).click()
         logging.info("Botão 'Enviar novo código' clicado")
+
         self.driver.switch_to.window(self.driver.window_handles[1])
         logging.info("Voltando para a aba do Temp-Mail")
 
@@ -75,7 +76,7 @@ class MyAccountPage():
          Atualiza a página do Temp-Mail, captura o novo código de acesso 
         e retorna para a aba da Americanas.
          """
-        time.sleep(5) 
+        time.sleep(4)
         self.driver.refresh()
         logging.info("Página do Temp-Mail atualizada para buscar o novo e-mail.")
         self.wait.until(EC.element_to_be_clickable(self.codigo_email_message)).click()
@@ -103,32 +104,34 @@ class MyAccountPage():
 
 
     def test_password(self, password):
-       """
+        """
         Testa a inserção de senha e verifica se o botão 'Salvar' está clicável.
         Limpa o campo antes e depois de cada teste.
         Retorna True se o botão puder ser clicado.
         """
-       input = self.wait.until(EC.visibility_of_element_located(self.input_password))        
-       input.send_keys(password)
-       logging.info(f"Senha inserida: {password}")
-       time.sleep(1.5)
+           
+        input_user_password = self.wait.until(EC.visibility_of_element_located(self.input_password))
 
-       try:
-        button_element =self.wait.until(EC.element_to_be_clickable(self.button))
-        is_clickable = True
-        button_element.click()
-        logging.info("Botão ciclado")
-       except:
-        is_clickable = False
-        logging.info("Botão não é clicável")
-    
-       logging.info(f"Botão de salvar é clicável? {is_clickable}")
-    
-     #Limpa o campo novamente para o próximo caso de teste
-       input.send_keys(Keys.COMMAND + "a")
-       input.send_keys(Keys.DELETE)
-    
-       return is_clickable
+        input_user_password.send_keys(password)
+        logging.info(f"Senha inserida: {password}")
+
+        try:
+        
+          self.wait.until(EC.element_to_be_clickable(self.button)).click()
+
+          is_clickable = True
+          logging.info("Botão clicado")
+
+        except TimeoutException:
+          is_clickable = False
+
+        logging.info(f"Botão de salvar é clicável? {is_clickable}")
+
+   
+        input_user_password.send_keys(Keys.COMMAND + "a")
+        input_user_password.send_keys(Keys.DELETE)
+
+        return is_clickable
     
     def test_button_click(self):
         """
@@ -138,10 +141,10 @@ class MyAccountPage():
         passwpord_input = self.wait.until(EC.visibility_of_element_located(self.input_password))
         passwpord_input.send_keys(self.password)
         button_element =self.wait.until(EC.element_to_be_clickable(self.button))
-        logging.info("Botão 'Salvar' clicável")
         button_element.click()
+        logging.info(f"Senha correta inserida: {self.password} e botão clicado")
 
-        logging.info("Senha válida e botão clicado")
+      
         self.wait.until(EC.visibility_of_element_located(self.container))
         logging.info("Container do sucesso apareceu")
 
@@ -149,10 +152,9 @@ class MyAccountPage():
     def test_password_validation_and_save(self):
       """Valida se a senha foi salva exibindo apenas '*' na tela."""
       try:
-        self.wait.until(
-            EC.text_to_be_present_in_element(self.success_field, "*")
-        )
+        self.wait.until(EC.text_to_be_present_in_element(self.success_field, "*"))
         logging.info("✅ Senha salva e máscara de '*' exibida corretamente na tela.")
+        
       except TimeoutException:
         logging.error("❌ Falha ao validar a máscara de senha — '*' não apareceu a tempo.")
         raise AssertionError("Erro: A máscara de senha ('*') não foi exibida após o salvamento.")

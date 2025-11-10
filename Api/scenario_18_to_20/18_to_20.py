@@ -1,26 +1,21 @@
 import requests 
 import logging
 
-def test_get_all_wishlists(base_url):
+def test_get_all_wishlists(base_url, token):
 # Scenario 18: Successfully Retrieve All Wishlists
 
-    login_payload = {"email": "projeto@example.com", "password": "Senha123!"}
-    login_response = requests.post(f"{base_url}/auth/login", json=login_payload)
-    assert login_response.status_code == 200
-    logging.info("✅ Login realizado com sucesso")
+     headers = {"Authorization": f"Bearer {token}"}
 
-    token = login_response.json()["access_token"]
-    headers = {"Authorization": f"Bearer {token}"}
+     logging.info("Requisição enviada para listar todas as wishlists")
 
-    response = requests.get(f"{base_url}/wishlists", headers=headers)
-    logging.info("Requisição enviada para listar todas as wishlists")
+     response = requests.get(f"{base_url}/wishlists", headers=headers)
 
-    assert response.status_code == 200
-    logging.info("Requisição bem-sucedida (status 200)")
+     assert response.status_code == 200
+     logging.info("Requisição bem-sucedida (status 200)")
 
-    data = response.json()
-    assert isinstance(data, list)
-    logging.info(f" Wishlist(s) retornadas: {len(data)}")
+     data = response.json()
+     assert isinstance(data, list)
+     logging.info(f"Wishlist(s) retornadas: {len(data)}")
 
 def test_get_empty_wishlists(base_url):
 #Scenario 19: Retrieve Wishlists When None Exist

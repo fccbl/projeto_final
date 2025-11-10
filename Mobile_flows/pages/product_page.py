@@ -48,7 +48,7 @@ class ProductPage(BasePage):
 
         price_app = price_elements[-1].get_attribute("contentDescription")
         clean_app = price_app.replace("R$", "").replace(".", "").replace(",", ".").strip()
-        clean_expected = expected_price.replace("R$", "").replace(".", "").replace(",", ".").strip()
+        clean_expected = clean_expected = expected_price.replace(".", "").replace(",", ".").strip()
 
         assert clean_app == clean_expected, f"Preço divergente. Esperado='{expected_price}', App='{clean_app}'"
         logging.info(f"✅ Preço validado: '{clean_app}'")

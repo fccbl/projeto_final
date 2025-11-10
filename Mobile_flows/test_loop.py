@@ -1,6 +1,6 @@
 from  pages.product_page import ProductPage
 from  pages.zipcode_page import ZipCodePage
-from  pages.poupup_page import CartPage
+from  pages.cart_page import CartPage
 from  pages.checkout_page import CheckoutPage
 from api_utils import get_wishlist_products
 import pytest

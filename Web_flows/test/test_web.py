@@ -32,7 +32,7 @@ def test_web_flow(driver, temp_mail_url, base_url_americanas):
     account_page.send_new_code()
     new_code = account_page.get_new_code()
     account_page.enter_access_code(new_code)
-  # Cenário de teste
+  # "Testing passwords"
     test_post = load_csv_test_cases("test_case.csv")
     for case in test_post:
         password = case["password"]

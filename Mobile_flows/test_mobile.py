@@ -1,6 +1,6 @@
-from pages.iphone_17 import First_Product
-from pages.apple_watch import Second_Product
-from pages.macbook_air import Third_Product
+from Mobile_flows.pages.Old_page.iphone_17 import First_Product
+from Mobile_flows.pages.Old_page.apple_watch import Second_Product
+from Mobile_flows.pages.Old_page.macbook_air import Third_Product
 
 
 def test_product_iphone_17(driver):

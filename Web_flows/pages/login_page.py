@@ -9,7 +9,7 @@ import time
 class LoginPage():
      def __init__(self, driver):
         self.driver = driver
-        self.wait = WebDriverWait(driver, 15)
+        self.wait = WebDriverWait(driver, 25)
         self.email_login = (By.NAME, "email")
         self.send_button = (By.CSS_SELECTOR,"button.vtex-button[type='submit']") 
         self.codigo_email_message = (By.CSS_SELECTOR, "span[data-qa='message-subject']")
@@ -64,7 +64,7 @@ class LoginPage():
         Captura o código de acesso enviado por e-mail no Temp-Mail.
        1. Abre a mensagem de e-mail que contém o código.
        2. Lê o conteúdo da mensagem.
-       3. Extrai o código (última palavra da mensagem).
+       3. Extrai o código.
        4. Converte para inteiro e retorna.
       """
        try: 
@@ -89,16 +89,19 @@ class LoginPage():
      def codigo_input_field(self, code):
       """Preenche o campo de código de verificação com o código fornecido."""
       try:
-        campo_codigo = self.wait.until(EC.presence_of_element_located(self.codigo_input))
-        self.wait.until(EC.visibility_of(campo_codigo))
+       
+        campo_codigo = self.wait.until(EC.visibility_of_element_located(self.codigo_input))
+
         campo_codigo.send_keys(code)
         logging.info(f"Código {code} preenchido no campo de verificação")
+
       except Exception as e:
         logging.error(f"Falha ao preencher o código de verificação: {e}")
         raise
 
      def button_confirm_code(self):
-          """Clica no botão 'Confirmar' para validar o código."""
+          """Clica no botão para validar o código."""
+
           self.wait.until(EC.element_to_be_clickable(self.confirm_button)).click()
           logging.info("Clique no botão Confirmar realizado")
      

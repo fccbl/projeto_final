@@ -1,12 +1,13 @@
-# Testes de API
+# API Tests
 
-Este conjunto de testes valida o fluxo completo da API, abrangendo autenticação, criação e gerenciamento de listas de desejos e produtos.  
+This test suite validates the full API flow, covering authentication, creation, and management of wishlists and products.
 
-Os cenários incluem:
-- Registro e login de usuários autenticados.  
-- Criação, listagem, atualização e exclusão de wishlists.  
-- Adição, consulta, atualização e remoção de produtos dentro das listas.  
-- Verificação de regras de autenticação, tokens inválidos e acessos não permitidos.  
-- Validação de dados obrigatórios e respostas conforme os status HTTP esperados.  
+The scenarios include:
+- User registration and login with authenticated access.  
+- Creation, listing, updating, and deletion of wishlists.  
+- Adding, retrieving, updating, and removing products within the lists.  
+- Verification of authentication rules, invalid tokens, and unauthorized access attempts.  
+- Validation of required fields and responses according to expected HTTP status codes.  
+
 
 

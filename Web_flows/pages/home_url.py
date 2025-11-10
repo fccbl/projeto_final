@@ -11,9 +11,9 @@ class HomePage:
         self.wait = WebDriverWait(self.driver, 10)
         self.popup_close_button = (By.CSS_SELECTOR, "div.ins-element-content")
         self.login_button = (By.CSS_SELECTOR, "a[href='/login']")
-
+        
     def navigate(self, url):
-        """Abre a página inicial na URL fornecida e limpa cookies"""
+        """Abre a página inicial na URL fornecida"""
         self.driver.get(url)
  
     

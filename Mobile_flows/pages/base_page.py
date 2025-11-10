@@ -5,6 +5,9 @@ class BasePage:
     def __init__(self, driver):
         self.driver = driver
         self.wait = WebDriverWait(driver, 10)
+        self.size = driver.get_window_size()
+        self.screen_width = self.size['width']
+        self.screen_height = self.size['height']
 
     def find_element(self, by, locator):
         return self.wait.until(EC.presence_of_element_located((by, locator)))
@@ -43,4 +46,16 @@ class BasePage:
         EC.presence_of_all_elements_located((by, locator))
     )
   
+    def scroll(self, direction="down"):
+        """
+        Faz scroll nativo: up, down, left, right
+        """
+        self.driver.execute_script("mobile: scrollGesture", {
+            "left": 0,
+            "top": self.screen_height * 0.3,
+            "width": self.screen_width,
+            "height": self.screen_height * 0.5,
+            "direction": direction,
+            "percent": 0.7
+        })
    

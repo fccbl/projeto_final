@@ -1,30 +1,30 @@
-## Mobile Flows – Jornada de Compra no App Americanas
-## 🎯 Objetivo
+## Mobile Flows – Purchase Journey in the Americanas App  
+## 🎯 Objective
 
-### Validar o fluxo completo de compra de produtos no aplicativo da Americanas, utilizando os 3 produtos retornados pela wishlist da API do projeto_final.
-O teste garante que as informações exibidas (nome, preço e frete) estejam corretas e que o processo de compra funcione até a tela de checkout.
+### Validate the complete product purchase flow in the Americanas mobile app, using the 3 products returned from the `wishlist` of the `project_final` API.
+The test ensures that the information displayed (name, price, and shipping) is correct and that the purchase process works properly up to the checkout screen.
 
-🧾 Resumo do Cenário
+🧾 **Scenario Summary**
 
-- Abrir o aplicativo da Americanas.
-- Buscar um produto retornado pela wishlist da API.
-- Selecionar o produto correto nos resultados.
-- Validar a página do produto:
-- Nome e preço correspondem ao retorno da API.
-- Inserir um CEP inválido e validar mensagem de erro.
-- Inserir o CEP válido da API e validar o cálculo de frete e prazo de entrega.
-- Adicionar o produto ao carrinho.
-- Validar o popup do carrinho:
-- Nome e preço corretos.
-- Aumentar quantidade para 2 unidades e validar atualização.
-- Diminuir para 1 unidade e verificar que o botão “–” fica inativo.
-- Aumentar novamente para 2 unidades.
-- Acessar a tela de finalização.
-- Validar o carrinho final:
-- Nome e quantidade corretos.
-- Subtotal e total dobrando o valor unitário.
-- Valor do botão “Finalizar compra” refletindo o total de duas unidades.
-- Repetir teste de CEP inválido e válido.
-- Prosseguir para o checkout.
-- Validar o redirecionamento para a tela de login com a mensagem:
-“Informe seu e-mail para continuar”.
+- Open the Americanas app.  
+- Search for a product returned by the API wishlist.  
+- Select the correct product from the results.  
+- Validate the product page:  
+  - Name and price match the API response.  
+  - Enter an invalid ZIP code and validate the error message.  
+  - Enter the valid ZIP code from the API and validate shipping cost and delivery estimate.  
+- Add the product to the cart.  
+- Validate the cart popup:  
+  - Name and price are correct.  
+  - Increase quantity to 2 units and validate the update.  
+  - Decrease to 1 unit and verify that the “–” button becomes disabled.  
+  - Increase again to 2 units.  
+- Proceed to the checkout screen.  
+- Validate the final cart:  
+  - Correct product name and quantity.  
+  - Subtotal and total reflecting twice the unit price.  
+  - The “Finalize Purchase” button shows the total price for two units.  
+- Repeat invalid and valid ZIP code validations.  
+- Continue to checkout.  
+- Validate the redirect to the login screen with the message:  
+  **“Enter your email to continue.”**

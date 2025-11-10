@@ -9,7 +9,7 @@ import allure
 @pytest.fixture
 def driver():
     """
-    Cria uma instância do Chrome 
+   Create a Chrome instance"
     """
     driver_instance = webdriver.Chrome()
     driver_instance.maximize_window()
